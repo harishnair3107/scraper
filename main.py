@@ -21,11 +21,13 @@ app.add_middleware(
 
 def get_db_connection():
     return mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="chickenfry31",
-        database="rating_tool"
+        host=os.getenv("DB_HOST", "localhost"),
+        user=os.getenv("DB_USER", "root"),
+        password=os.getenv("DB_PASSWORD", "chickenfry31"),
+        database=os.getenv("DB_NAME", "rating_tool"),
+        port=int(os.getenv("DB_PORT", 3306))
     )
+
 
 def sanitize_column_name(col):
     # Remove special chars, replace spaces with underscores

@@ -10,12 +10,13 @@ import mysql.connector
 
 def get_db_connection():
     return mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="chickenfry31",
-        database="rating_tool",
-        autocommit=True
+        host=os.getenv("DB_HOST", ""),
+        user=os.getenv("DB_USER", "harish_rating_tool"),
+        password=os.getenv("DB_PASSWORD", "gravyLolipop"),
+        database=os.getenv("DB_NAME", "harish_rating_tool"),
+        port=int(os.getenv("DB_PORT", 3306))
     )
+
 
 # Force UTF-8 for console output to avoid Windows charmap errors with emojis
 if sys.platform == 'win32':
