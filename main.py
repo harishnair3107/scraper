@@ -1,5 +1,6 @@
 import sys
 import os
+import io
 import re
 import pandas as pd
 import mysql.connector
@@ -51,16 +52,13 @@ async def upload_excel_endpoint(file: UploadFile = File(...), custom_name: str =
             table_name = f"upload_{timestamp}_{clean_name}"
         
         save_filename = f"{timestamp}_{file.filename}"
-        save_path = os.path.join("uploads", save_filename)
+        save_path = "stored_in_db"
         
-        with open(save_path, "wb") as f:
-            f.write(contents)
-            
         filename_lower = file.filename.lower()
         if filename_lower.endswith('.csv'):
-            df = pd.read_csv(save_path)
+            df = pd.read_csv(io.BytesIO(contents))
         elif filename_lower.endswith('.xlsx') or filename_lower.endswith('.xls'):
-            df = pd.read_excel(save_path)
+            df = pd.read_excel(io.BytesIO(contents))
         else:
             raise Exception("Unsupported file type.")
             
@@ -195,7 +193,7 @@ def delete_upload(upload_id: int):
             raise HTTPException(status_code=404, detail="Upload not found")
             
         file_path = record['file_path']
-        if os.path.exists(file_path):
+        if file_path != "stored_in_db" and os.path.exists(file_path):
             try: os.remove(file_path)
             except: pass
             

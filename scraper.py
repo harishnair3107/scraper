@@ -10,7 +10,7 @@ import mysql.connector
 
 def get_db_connection():
     return mysql.connector.connect(
-        host=os.getenv("DB_HOST", ""),
+        host=os.getenv("DB_HOST", "server.blankmedia.in"),
         user=os.getenv("DB_USER", "harish_rating_tool"),
         password=os.getenv("DB_PASSWORD", "gravyLolipop"),
         database=os.getenv("DB_NAME", "harish_rating_tool"),
